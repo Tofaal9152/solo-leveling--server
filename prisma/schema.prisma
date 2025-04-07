@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  name             String
+  password         String?
+  refreshToken     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  xp               Int      @default(0) // User's current XP
+  health           Int      @default(100) // User's current health points
+  levelUpHealth    Int      @default(100) // Health points required to level up
+  level            Int      @default(0) // User's level
+  levelUpXp        Int      @default(100) // XP required to level up
+  totalStatePoints Int      @default(0) // Total stat points available for allocation
+  statStrength     Int      @default(0) // Stat points for Strength
+  statIntelligence Int      @default(0) // Stat points for Intelligence
+  statDiscipline   Int      @default(0) // Stat points for Discipline
+  statCharisma     Int      @default(0) // Stat points for Charisma
+  statWillpower    Int      @default(0) // Stat points for Willpower
+  Quest            Quest[]
+}
+
+model Quest {
+  id           String    @id @default(uuid())
+  title        String
+  description  String
+  xp           Int // XP awarded for completing the quest
+  statPoints   Int // Stat points awarded for completing the quest
+  healthPoints Int // Health points awarded for completing the quest
+  frequency    Frequency // Frequency of the quest (daily, weekly, monthly)
+  status       Status    @default(PENDING) // Status of the quest
+  createdAt    DateTime  @default(now()) // When the quest was created
+  updatedAt    DateTime  @updatedAt // When the quest was last updated
+  userId       String // Reference to the User
+  user         User      @relation(fields: [userId], references: [id])
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum Status {
+  PENDING
+  COMPLETED
+}
