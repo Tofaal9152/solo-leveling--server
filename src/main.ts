@@ -13,7 +13,7 @@ async function bootstrap() {
   // Apply Global Guards
   const reflector = new Reflector();
   app.useGlobalGuards(new JwtGuard(reflector));
- 
+
   // Enable CORS
   app.enableCors(corsConfig);
 
