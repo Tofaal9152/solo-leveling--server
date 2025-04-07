@@ -17,7 +17,7 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors(corsConfig);
 
-  await app.listen(5000);
+  await app.listen(process.env.PORT);
 }
 bootstrap().catch((err) => {
   if (err instanceof Error) {
